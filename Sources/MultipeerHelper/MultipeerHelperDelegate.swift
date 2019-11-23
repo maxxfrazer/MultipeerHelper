@@ -39,7 +39,7 @@ extension MultipeerHelperDelegate {
     print("receivedStream not implemented")
   }
   func receivingResource(_: String, _: MCPeerID, _: Progress) -> Void {
-//    print("receivingResource not implemented")
+    print("receivingResource not implemented")
   }
   func receivedResource(_: String, _: MCPeerID, _: URL?, _: Error?) -> Void {
     print("receivedResource not implemented")
