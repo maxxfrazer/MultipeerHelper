@@ -49,8 +49,8 @@ class RealityViewController: UIViewController, ARSessionDelegate {
 extension RealityViewController: MultipeerHelperDelegate {
   func setupMultipeer() {
     self.multipeerHelp = MultipeerHelper(
-      sessionType: .both,
       serviceName: "helper-test",
+      sessionType: .both,
       delegate: self
     )
 
