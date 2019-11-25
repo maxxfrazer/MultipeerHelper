@@ -21,12 +21,24 @@ self.multipeerHelp = MultipeerHelper(
 )
 ```
 
+To extend this to RealityKit's synchronization service, simply add the following:
+
+```swift
+self.arView.scene.synchronizationService = self.multipeerHelp.syncService
+```
+
 ### Initializer Parameters
 
 #### serviceName
-This is the type of service to advertise or search for. Due to how MultipeerConnectivity uses it, it should have the following restrictions
+This is the type of service to advertise or search for. Due to how MultipeerConnectivity uses it, it should have the following restrictions:
  - Must be 1–15 characters long
  - Can contain only ASCII lowercase letters, numbers, and hyphens
  - Must contain at least one ASCII letter
  - Must not begin or end with a hyphen
  - Must not contain hyphens adjacent to other hyphens.
+
+#### sessionType
+This lets the service know if it should be acting as a service `host` (advertiser), `peer` (browser), or in a scenario where it doesn't matter, `both`. The default for this parameter is `both`, which is the scenario where all devices want to just connect to each other with no questions asked.
+
+#### delegate
+This delegate object will inherit the `MultipeerHelperDelegate` protocol, which can be used for all the handling of transferring data round the network and seeing when others join and leave.
