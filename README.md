@@ -1,3 +1,5 @@
+![Path Example 1](https://github.com/maxxfrazer/MultipeerHelper/blob/master/media/MultipeerHelper-Header.png)
+
 # MultipeerHelper
 
 MultipeerConnectivity can be a big pill for developers to swallow. This package aims to simplify the creation of a multi-peer experience, while still delivering the full power of Apple's API.
