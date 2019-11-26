@@ -21,6 +21,8 @@ class RealityViewController: UIViewController, ARSessionDelegate {
     setupARView()
     setupMultipeer()
 
+    // Do not synchronize this entity
+    focusSquare.synchronization = nil
     self.focusSquare.viewDelegate = self.arView
   }
 

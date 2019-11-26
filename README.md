@@ -27,6 +27,8 @@ To extend this to RealityKit's synchronization service, simply add the following
 self.arView.scene.synchronizationService = self.multipeerHelp.syncService
 ```
 
+And also make sure that your ARConfiguration's isCollaborationEnabled property is set to true.
+
 ### Initializer Parameters
 
 #### serviceName
