@@ -20,13 +20,11 @@ public class MultipeerHelper: NSObject {
   }
   public let sessionType: SessionType
   public let serviceName: String
-  public var syncService: MultipeerConnectivityService?  {
-    get {
-      if syncServiceRK == nil {
-        syncServiceRK = try? MultipeerConnectivityService(session: self.session)
-      }
-      return syncServiceRK
+  public var syncService: MultipeerConnectivityService? {
+    if syncServiceRK == nil {
+      syncServiceRK = try? MultipeerConnectivityService(session: self.session)
     }
+    return syncServiceRK
   }
 
   public let myPeerID = MCPeerID(displayName: UIDevice.current.name)
@@ -35,7 +33,7 @@ public class MultipeerHelper: NSObject {
   private var serviceBrowser: MCNearbyServiceBrowser?
   private var syncServiceRK: MultipeerConnectivityService?
 
-  public var delegate: MultipeerHelperDelegate?
+  public weak var delegate: MultipeerHelperDelegate?
 
   /// - Parameters:
   ///   - serviceName: name of the service to be added, must be less than 15 lowercase ascii characters
@@ -45,7 +43,7 @@ public class MultipeerHelper: NSObject {
     serviceName: String,
     sessionType: SessionType = .both,
     delegate: MultipeerHelperDelegate? = nil
-  ){
+  ) {
     self.serviceName = serviceName
     self.sessionType = sessionType
     self.delegate = delegate
@@ -163,4 +161,3 @@ extension MultipeerHelper: MCNearbyServiceAdvertiserDelegate {
     invitationHandler(true, self.session)
   }
 }
-
