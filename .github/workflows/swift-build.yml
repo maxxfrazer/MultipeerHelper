@@ -1,0 +1,25 @@
+name: build
+
+on:
+  push:
+    branches:
+      - "master"
+    tags:
+      - "!*"
+  pull_request:
+    branches:
+    - "*"
+
+jobs:
+  build:
+    runs-on: macOS-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: build
+      run: |
+        swift package generate-xcodeproj
+        xcodebuild clean build -project $PROJECT -scheme $SCHEME -destination "$DESTINATION" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
+      env:
+        PROJECT: MultipeerHelper.xcodeproj
+        SCHEME: MultipeerHelper-Package
+        DESTINATION: platform=iOS Simulator,name=iPhone Xs

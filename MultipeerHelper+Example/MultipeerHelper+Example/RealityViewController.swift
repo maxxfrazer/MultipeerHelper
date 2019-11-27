@@ -63,7 +63,7 @@ extension RealityViewController: MultipeerHelperDelegate {
     arView.scene.synchronizationService = syncService
   }
 
-  func receivedData(_ data: Data, _: MCPeerID) {
+  func receivedData(_ data: Data, _ peer: MCPeerID) {
     print(String(data: data, encoding: .ascii) ?? "Data is not an ASCII string")
   }
 
