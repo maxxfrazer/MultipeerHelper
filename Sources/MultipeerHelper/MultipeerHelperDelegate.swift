@@ -32,7 +32,7 @@ extension MultipeerHelperDelegate {
   /// Peer can no longer be found on the network, and thus cannot receive data
   /// - Parameter peer: If a peer has left the network in a non typical way
   func peerLost(_ peer: MCPeerID) {}
-  func receivedStream(_: InputStream, _: String, _: MCPeerID) {}
-  func receivingResource(_: String, _: MCPeerID, _: Progress) {}
-  func receivedResource(_: String, _: MCPeerID, _: URL?, _: Error?) {}
+  func receivedStream(_ stream: InputStream, _ streamName: String, _ peer: MCPeerID) {}
+  func receivingResource(_ resourceName: String, _ peer: MCPeerID, _ progress: Progress) {}
+  func receivedResource(_ resourceName: String, _ peer: MCPeerID, _ url: URL?, _ error: Error?) {}
 }
