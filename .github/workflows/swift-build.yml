@@ -22,4 +22,4 @@ jobs:
       env:
         PROJECT: MultipeerHelper.xcodeproj
         SCHEME: MultipeerHelper-Package
-        DESTINATION: platform=iOS Simulator,name=iPhone Xs
+        SDK: iphoneos
