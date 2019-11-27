@@ -6,43 +6,39 @@
 //  Copyright © 2019 Max Cobb. All rights reserved.
 //
 
-import SwiftUI
-import RealityKit
 import ARKit
 import FocusEntity
+import RealityKit
 import SmartHitTest
+import SwiftUI
 
-struct ContentView : View {
-    var body: some View {
-        return ARViewContainer().edgesIgnoringSafeArea(.all)
-    }
+struct ContentView: View {
+  var body: some View {
+    ARViewContainer().edgesIgnoringSafeArea(.all)
+  }
 }
 
-
 struct ARViewContainer: UIViewControllerRepresentable {
-
   func makeUIViewController(
-    context: UIViewControllerRepresentableContext<
-      ARViewContainer
+    context _: UIViewControllerRepresentableContext<
+    ARViewContainer
     >
   ) -> RealityViewController {
     RealityViewController()
   }
 
   func updateUIViewController(
-    _ uiViewController: RealityViewController,
-    context: UIViewControllerRepresentableContext<
-      ARViewContainer
+    _: RealityViewController,
+    context _: UIViewControllerRepresentableContext<
+    ARViewContainer
     >
-  ) {
-  }
-
+  ) {}
 }
 
 #if DEBUG
-struct ContentView_Previews : PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
+struct ContentView_Previews: PreviewProvider {
+  static var previews: some View {
+    ContentView()
+  }
 }
 #endif

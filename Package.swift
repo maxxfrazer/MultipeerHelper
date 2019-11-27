@@ -7,7 +7,7 @@ let package = Package(
   name: "MultipeerHelper",
   platforms: [.iOS("13.0")],
   products: [
-    .library(name: "MultipeerHelper", targets: ["MultipeerHelper"]),
+    .library(name: "MultipeerHelper", targets: ["MultipeerHelper"])
   ],
   targets: [
     .target(name: "MultipeerHelper")

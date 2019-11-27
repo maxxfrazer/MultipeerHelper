@@ -18,11 +18,12 @@ public class MultipeerHelper: NSObject {
     case peer = 2
     case both = 3
   }
+
   public let sessionType: SessionType
   public let serviceName: String
   public var syncService: MultipeerConnectivityService? {
     if syncServiceRK == nil {
-      syncServiceRK = try? MultipeerConnectivityService(session: self.session)
+      syncServiceRK = try? MultipeerConnectivityService(session: session)
     }
     return syncServiceRK
   }
@@ -80,53 +81,53 @@ public class MultipeerHelper: NSObject {
   }
 
   public var connectedPeers: [MCPeerID] {
-    return session.connectedPeers
+    session.connectedPeers
   }
 }
 
 extension MultipeerHelper: MCSessionDelegate {
-
   public func session(
-    _ session: MCSession,
+    _: MCSession,
     peer peerID: MCPeerID,
     didChange state: MCSessionState
   ) {
     if state == .connected {
-      self.delegate?.peerJoined(peerID)
+      delegate?.peerJoined(peerID)
     } else if state == .notConnected {
-      self.delegate?.peerLeft(peerID)
+      delegate?.peerLeft(peerID)
     }
   }
 
-  public func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-    self.delegate?.receivedData(data, peerID)
+  public func session(_: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
+    delegate?.receivedData(data, peerID)
   }
 
   public func session(
-    _ session: MCSession,
+    _: MCSession,
     didReceive stream: InputStream,
     withName streamName: String,
     fromPeer peerID: MCPeerID
   ) {
-    self.delegate?.receivedStream(stream, streamName, peerID)
+    delegate?.receivedStream(stream, streamName, peerID)
   }
 
   public func session(
-    _ session: MCSession,
+    _: MCSession,
     didStartReceivingResourceWithName resourceName: String,
     fromPeer peerID: MCPeerID,
     with progress: Progress
   ) {
-    self.delegate?.receivingResource(resourceName, peerID, progress)
+    delegate?.receivingResource(resourceName, peerID, progress)
   }
+
   public func session(
-    _ session: MCSession,
+    _: MCSession,
     didFinishReceivingResourceWithName resourceName: String,
     fromPeer peerID: MCPeerID,
     at localURL: URL?,
     withError error: Error?
   ) {
-    self.delegate?.receivedResource(resourceName, peerID, localURL, error)
+    delegate?.receivedResource(resourceName, peerID, localURL, error)
   }
 }
 
@@ -135,29 +136,29 @@ extension MultipeerHelper: MCNearbyServiceBrowserDelegate {
   public func browser(
     _ browser: MCNearbyServiceBrowser,
     foundPeer peerID: MCPeerID,
-    withDiscoveryInfo info: [String: String]?
+    withDiscoveryInfo _: [String: String]?
   ) {
     // Ask the handler whether we should invite this peer or not
-    let accepted = self.delegate?.peerDiscovered(peerID)
+    let accepted = delegate?.peerDiscovered(peerID)
     if accepted != false {
       browser.invitePeer(peerID, to: session, withContext: nil, timeout: 10)
     }
   }
 
-  public func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
-    self.delegate?.peerLost(peerID)
+  public func browser(_: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
+    delegate?.peerLost(peerID)
   }
 }
 
 extension MultipeerHelper: MCNearbyServiceAdvertiserDelegate {
   /// - Tag: AcceptInvite
   public func advertiser(
-    _ advertiser: MCNearbyServiceAdvertiser,
-    didReceiveInvitationFromPeer peerID: MCPeerID,
-    withContext context: Data?,
+    _: MCNearbyServiceAdvertiser,
+    didReceiveInvitationFromPeer _: MCPeerID,
+    withContext _: Data?,
     invitationHandler: @escaping (Bool, MCSession?) -> Void
   ) {
     // Call the handler to accept the peer's invitation to join.
-    invitationHandler(true, self.session)
+    invitationHandler(true, session)
   }
 }

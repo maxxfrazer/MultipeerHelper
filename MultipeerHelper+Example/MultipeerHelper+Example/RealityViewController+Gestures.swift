@@ -6,18 +6,18 @@
 //  Copyright © 2019 Max Cobb. All rights reserved.
 //
 
-import UIKit
 import ARKit
 import RealityKit
+import UIKit
 
 extension RealityViewController {
   /// This function does two things. Sends a message "hello!" to all peers, and also adds a cube
   /// at the touch location
-  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+  override func touchesBegan(_ touches: Set<UITouch>, with _: UIEvent?) {
     guard let myData = "hello!".data(using: .ascii) else {
       return
     }
-    self.multipeerHelp.sendToAllPeers(myData, reliably: true)
+    multipeerHelp.sendToAllPeers(myData, reliably: true)
 
     guard let touchInView = touches.first?.location(in: self.arView) else {
       return
@@ -42,7 +42,7 @@ extension RealityViewController {
     newAnchor.synchronization?.ownershipTransferMode = .autoAccept
 
     newAnchor.anchoring = AnchoringComponent(arAnchor)
-    self.arView.scene.addAnchor(newAnchor)
-    self.arView.session.add(anchor: arAnchor)
+    arView.scene.addAnchor(newAnchor)
+    arView.session.add(anchor: arAnchor)
   }
 }
