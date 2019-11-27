@@ -41,8 +41,8 @@ This is the type of service to advertise or search for. Due to how MultipeerConn
  - Must not begin or end with a hyphen
  - Must not contain hyphens adjacent to other hyphens.
 
-#### sessionType
+#### sessionType (default: .both)
 This lets the service know if it should be acting as a service `host` (advertiser), `peer` (browser), or in a scenario where it doesn't matter, `both`. The default for this parameter is `both`, which is the scenario where all devices want to just connect to each other with no questions asked.
 
-#### delegate
+#### delegate (default: nil)
 This delegate object will inherit the `MultipeerHelperDelegate` protocol, which can be used for all the handling of transferring data round the network and seeing when others join and leave.
