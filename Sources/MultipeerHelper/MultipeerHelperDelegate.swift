@@ -9,7 +9,7 @@ import MultipeerConnectivity
 
 public protocol MultipeerHelperDelegate: AnyObject {}
 
-extension MultipeerHelperDelegate {
+public extension MultipeerHelperDelegate {
   /// Data that has been recieved from another peer
   /// - Parameters:
   ///     - data: The data which has been recieved
