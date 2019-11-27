@@ -92,14 +92,14 @@ extension MultipeerHelper: MCSessionDelegate {
     didChange state: MCSessionState
   ) {
     if state == .connected {
-      delegate?.peerJoined(peerID)
+      delegate?.peerJoined?(peerID)
     } else if state == .notConnected {
-      delegate?.peerLeft(peerID)
+      delegate?.peerLeft?(peerID)
     }
   }
 
   public func session(_: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-    delegate?.receivedData(data, peerID)
+    delegate?.receivedData?(data, peerID)
   }
 
   public func session(
@@ -108,7 +108,7 @@ extension MultipeerHelper: MCSessionDelegate {
     withName streamName: String,
     fromPeer peerID: MCPeerID
   ) {
-    delegate?.receivedStream(stream, streamName, peerID)
+    delegate?.receivedStream?(stream, streamName, peerID)
   }
 
   public func session(
@@ -117,7 +117,7 @@ extension MultipeerHelper: MCSessionDelegate {
     fromPeer peerID: MCPeerID,
     with progress: Progress
   ) {
-    delegate?.receivingResource(resourceName, peerID, progress)
+    delegate?.receivingResource?(resourceName, peerID, progress)
   }
 
   public func session(
@@ -127,7 +127,7 @@ extension MultipeerHelper: MCSessionDelegate {
     at localURL: URL?,
     withError error: Error?
   ) {
-    delegate?.receivedResource(resourceName, peerID, localURL, error)
+    delegate?.receivedResource?(resourceName, peerID, localURL, error)
   }
 }
 
@@ -139,14 +139,14 @@ extension MultipeerHelper: MCNearbyServiceBrowserDelegate {
     withDiscoveryInfo _: [String: String]?
   ) {
     // Ask the handler whether we should invite this peer or not
-    let accepted = delegate?.peerDiscovered(peerID)
-    if accepted != false {
+    let accepted = delegate?.peerDiscovered?(peerID) ?? false
+    if delegate?.peerDiscovered == nil || accepted != false {
       browser.invitePeer(peerID, to: session, withContext: nil, timeout: 10)
     }
   }
 
   public func browser(_: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
-    delegate?.peerLost(peerID)
+    delegate?.peerLost?(peerID)
   }
 }
 
