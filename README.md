@@ -1,3 +1,7 @@
+[![Lint Status](https://github.com/maxxfrazer/MultipeerHelper/workflows/swiftlint/badge.svg)](https://github.com/maxxfrazer/MultipeerHelper/actions)
+[![Build Status](https://github.com/maxxfrazer/MultipeerHelper/workflows/build/badge.svg)](https://github.com/maxxfrazer/MultipeerHelper/actions)
+[![Swift Package Manager](https://img.shields.io/github/v/release/maxxfrazer/MultipeerHelper?color=orange&label=SwiftPM%20📦)](https://github.com/apple/swift-package-manager)
+
 ![Path Example 1](https://github.com/maxxfrazer/MultipeerHelper/blob/master/media/MultipeerHelper-Header.png)
 
 # MultipeerHelper
