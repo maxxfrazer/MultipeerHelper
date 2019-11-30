@@ -31,7 +31,7 @@ public class MultipeerHelper: NSObject {
   public let myPeerID = MCPeerID(displayName: UIDevice.current.name)
   public private(set) var session: MCSession!
   public private(set) var serviceAdvertiser: MCNearbyServiceAdvertiser?
-  public private(set) serviceBrowser: MCNearbyServiceBrowser?
+  public private(set) var serviceBrowser: MCNearbyServiceBrowser?
   private var syncServiceRK: MultipeerConnectivityService?
 
   public weak var delegate: MultipeerHelperDelegate?
