@@ -29,9 +29,9 @@ public class MultipeerHelper: NSObject {
   }
 
   public let myPeerID = MCPeerID(displayName: UIDevice.current.name)
-  private var session: MCSession!
-  private var serviceAdvertiser: MCNearbyServiceAdvertiser?
-  private var serviceBrowser: MCNearbyServiceBrowser?
+  public private(set) var session: MCSession!
+  public private(set) var serviceAdvertiser: MCNearbyServiceAdvertiser?
+  public private(set) serviceBrowser: MCNearbyServiceBrowser?
   private var syncServiceRK: MultipeerConnectivityService?
 
   public weak var delegate: MultipeerHelperDelegate?
@@ -66,18 +66,21 @@ public class MultipeerHelper: NSObject {
     }
   }
 
-  public func sendToAllPeers(_ data: Data, reliably: Bool) {
-    sendToPeers(data, reliably: reliably, peers: connectedPeers)
+  @discardableResult
+  public func sendToAllPeers(_ data: Data, reliably: Bool) -> Bool {
+    return sendToPeers(data, reliably: reliably, peers: connectedPeers)
   }
 
-  /// - Tag: SendToPeers
-  func sendToPeers(_ data: Data, reliably: Bool, peers: [MCPeerID]) {
-    guard !peers.isEmpty else { return }
+  @discardableResult
+  public func sendToPeers(_ data: Data, reliably: Bool, peers: [MCPeerID]) -> Bool {
+    guard !peers.isEmpty else { return false }
     do {
       try session.send(data, toPeers: peers, with: reliably ? .reliable : .unreliable)
     } catch {
       print("error sending data to peers \(peers): \(error.localizedDescription)")
+      return false
     }
+    return true
   }
 
   public var connectedPeers: [MCPeerID] {
