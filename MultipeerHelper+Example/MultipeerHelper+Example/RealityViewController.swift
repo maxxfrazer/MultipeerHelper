@@ -19,6 +19,7 @@ class RealityViewController: UIViewController, ARSessionDelegate {
     super.init(nibName: nil, bundle: nil)
     setupARView()
     setupMultipeer()
+    setupGestures()
 
     // Do not synchronize this entity
     focusSquare.synchronization = nil

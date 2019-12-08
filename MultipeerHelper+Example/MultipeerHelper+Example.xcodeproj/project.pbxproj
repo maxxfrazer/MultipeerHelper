@@ -17,6 +17,7 @@
 		F32BA09E2389B2760075556C /* MultipeerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32BA09C2389B2760075556C /* MultipeerHelper.swift */; };
 		F32BA09F2389B2760075556C /* MultipeerHelperDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32BA09D2389B2760075556C /* MultipeerHelperDelegate.swift */; };
 		F32BA0A12389E6AB0075556C /* RealityViewController+Gestures.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32BA0A02389E6AB0075556C /* RealityViewController+Gestures.swift */; };
+		F3B042F8239D49D700E18DED /* HasSynchronization+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B042F7239D49D700E18DED /* HasSynchronization+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		F32BA09C2389B2760075556C /* MultipeerHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MultipeerHelper.swift; path = ../Sources/MultipeerHelper/MultipeerHelper.swift; sourceTree = SOURCE_ROOT; };
 		F32BA09D2389B2760075556C /* MultipeerHelperDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MultipeerHelperDelegate.swift; path = ../Sources/MultipeerHelper/MultipeerHelperDelegate.swift; sourceTree = SOURCE_ROOT; };
 		F32BA0A02389E6AB0075556C /* RealityViewController+Gestures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RealityViewController+Gestures.swift"; sourceTree = "<group>"; };
+		F3B042F7239D49D700E18DED /* HasSynchronization+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "HasSynchronization+Extensions.swift"; path = "../../../Sources/MultipeerHelper/HasSynchronization+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +90,7 @@
 		F32BA0992389B2470075556C /* MultipeerHelper */ = {
 			isa = PBXGroup;
 			children = (
+				F3B042F7239D49D700E18DED /* HasSynchronization+Extensions.swift */,
 				F32BA09C2389B2760075556C /* MultipeerHelper.swift */,
 				F32BA09D2389B2760075556C /* MultipeerHelperDelegate.swift */,
 			);
@@ -176,6 +179,7 @@
 				F32BA0A12389E6AB0075556C /* RealityViewController+Gestures.swift in Sources */,
 				F32BA09F2389B2760075556C /* MultipeerHelperDelegate.swift in Sources */,
 				F32BA0982389B1880075556C /* RealityViewController.swift in Sources */,
+				F3B042F8239D49D700E18DED /* HasSynchronization+Extensions.swift in Sources */,
 				F32BA081238935120075556C /* AppDelegate.swift in Sources */,
 				F32BA09E2389B2760075556C /* MultipeerHelper.swift in Sources */,
 			);
