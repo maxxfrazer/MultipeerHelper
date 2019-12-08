@@ -8,7 +8,7 @@
 
 import RealityKit
 
-public enum MHelper: Error {
+public enum MHelperErrors: Error {
   case timedOut
   case failure
 }
@@ -28,7 +28,12 @@ public extension HasSynchronization {
         if result == .granted {
           completion(.success(self))
         } else {
-          completion(.failure(result == .timedOut ? MHelper.timedOut : MHelper.failure))
+          completion(
+            .failure(result == .timedOut ?
+              MHelperErrors.timedOut :
+              MHelperErrors.failure
+            )
+          )
         }
       }
     }
