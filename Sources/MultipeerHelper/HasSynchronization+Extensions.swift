@@ -17,7 +17,7 @@ public extension HasSynchronization {
   /// Execute the escaping completion if you are the entity owner, once you receive ownership
   /// or call result failure if ownership cannot be granted to the caller.
   /// - Parameter completion: completion of type Result, success once ownership granted, failure if not granted
-  func runWithOwnerhsip(
+  func runWithOwnership(
     completion: @escaping (Result<HasSynchronization, Error>) -> Void
   ) {
     if self.isOwner {

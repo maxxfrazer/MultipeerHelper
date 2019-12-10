@@ -31,7 +31,7 @@ extension RealityViewController: UIGestureRecognizerDelegate {
     }
     if let hitEntity = self.arView.entity(at: touchInView) {
       // animate the Entity
-      hitEntity.runWithOwnerhsip { (result) in
+      hitEntity.runWithOwnership { (result) in
         switch result {
         case .success:
           let origTransform = Transform(scale: .one, rotation: .init(), translation: .zero)
