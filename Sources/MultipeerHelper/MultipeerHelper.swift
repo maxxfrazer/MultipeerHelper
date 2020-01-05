@@ -19,8 +19,11 @@ public class MultipeerHelper: NSObject {
     case both = 3
   }
 
+  /// Detemines whether your service is advertising, browsing, or both.
   public let sessionType: SessionType
   public let serviceName: String
+
+  /// Used for RealityKit, set this as your scene's synchronizationService
   public var syncService: MultipeerConnectivityService? {
     if syncServiceRK == nil {
       syncServiceRK = try? MultipeerConnectivityService(session: session)
@@ -29,6 +32,11 @@ public class MultipeerHelper: NSObject {
   }
 
   public let myPeerID = MCPeerID(displayName: UIDevice.current.name)
+
+  /// Quick lookup for a peer given their displayName
+  private var peerIDLookup: [String: MCPeerID] = [:]
+
+  /// The MultipeerConnectivity session being used
   public private(set) var session: MCSession!
   public private(set) var serviceAdvertiser: MCNearbyServiceAdvertiser?
   public private(set) var serviceBrowser: MCNearbyServiceBrowser?
@@ -52,8 +60,10 @@ public class MultipeerHelper: NSObject {
     self.delegate = delegate
 
     super.init()
+    peerIDLookup[myPeerID.displayName] = myPeerID
     session = MCSession(
-      peer: myPeerID, securityIdentity: nil,
+      peer: myPeerID,
+      securityIdentity: nil,
       encryptionPreference: encryptionPreference
     )
     session.delegate = self
@@ -71,11 +81,20 @@ public class MultipeerHelper: NSObject {
     }
   }
 
+  /// Data to be sent to all of the connected peers
+  /// - Parameters:
+  ///   - data: Encoded data to be sent
+  ///   - reliably: The transmission mode to use (true for data to be sent reliably).
   @discardableResult
-  public func sendToAllPeers(_ data: Data, reliably: Bool) -> Bool {
+  public func sendToAllPeers(_ data: Data, reliably: Bool = true) -> Bool {
     return sendToPeers(data, reliably: reliably, peers: connectedPeers)
   }
 
+  /// Data to be sent to a list of peers
+  /// - Parameters:
+  ///   - data: encoded data to be sent
+  ///   - reliably: The transmission mode to use (true for data to be sent reliably).
+  ///   - peers: An array of all the peers to rec3ive your data
   @discardableResult
   public func sendToPeers(_ data: Data, reliably: Bool, peers: [MCPeerID]) -> Bool {
     guard !peers.isEmpty else { return false }
@@ -91,6 +110,34 @@ public class MultipeerHelper: NSObject {
   public var connectedPeers: [MCPeerID] {
     session.connectedPeers
   }
+
+  /// Data to be send to peer using their displayname
+  /// - Parameters:
+  ///   - displayname: displayname of the peer you want to be sent
+  ///   - data: encoded data to be sent
+  ///   - reliably: The transmission mode to use (true for data to be sent reliably).
+  public func sendToPeer(named displayname: String, data: Data, reliably: Bool = true) -> Bool {
+    guard let recipient = self.findPeer(name: displayname) else {
+      return false
+    }
+    return self.sendToPeers(data, reliably: reliably, peers: [recipient])
+  }
+
+  /// Look up a peer given their displayname
+  /// - Parameter name: The displayname of the peer you are looking for
+  public func findPeer(name: String) -> MCPeerID? {
+    if let peer = self.peerIDLookup[name] {
+      return peer
+    }
+    defer {
+      // In case for some reason the peerIDLookup is out of sync, recalculate it
+      self.peerIDLookup.removeAll(keepingCapacity: false)
+      for connectedPeer in self.connectedPeers {
+        self.peerIDLookup[connectedPeer.displayName] = connectedPeer
+      }
+    }
+    return connectedPeers.first { $0.displayName == name }
+  }
 }
 
 extension MultipeerHelper: MCSessionDelegate {
@@ -100,8 +147,10 @@ extension MultipeerHelper: MCSessionDelegate {
     didChange state: MCSessionState
   ) {
     if state == .connected {
+      peerIDLookup[peerID.displayName] = peerID
       delegate?.peerJoined?(peerID)
     } else if state == .notConnected {
+      peerIDLookup.removeValue(forKey: peerID.displayName)
       delegate?.peerLeft?(peerID)
     }
   }
