@@ -21,10 +21,11 @@ extension RealityViewController: UIGestureRecognizerDelegate {
   /// If you tap on an existing entity, it will run a scale up and down animation
   /// If you tap on the floor without hitting any entities it will create a new Anchor
   @objc func handleTap(_ sender: UITapGestureRecognizer? = nil) {
-    guard let myData = "hello!".data(using: .ascii) else {
-      return
+    if let myData = "hello! from \(self.multipeerHelp.myPeerID.displayName)"
+      .data(using: .unicode)
+    {
+      multipeerHelp.sendToAllPeers(myData, reliably: true)
     }
-    multipeerHelp.sendToAllPeers(myData, reliably: true)
 
     guard let touchInView = sender?.location(in: self.arView) else {
       return
