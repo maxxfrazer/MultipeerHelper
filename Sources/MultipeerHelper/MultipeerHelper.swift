@@ -142,8 +142,8 @@ extension MultipeerHelper: MCNearbyServiceBrowserDelegate {
     withDiscoveryInfo _: [String: String]?
   ) {
     // Ask the handler whether we should invite this peer or not
-    let accepted = delegate?.peerDiscovered?(peerID) ?? false
-    if delegate?.peerDiscovered == nil || accepted != false {
+    if delegate?.shouldSendJoinRequest == nil || (delegate?.shouldSendJoinRequest?(peerID) ?? false) {
+      print("BrowserDelegate \(peerID)")
       browser.invitePeer(peerID, to: session, withContext: nil, timeout: 10)
     }
   }
@@ -157,11 +157,12 @@ extension MultipeerHelper: MCNearbyServiceAdvertiserDelegate {
   /// - Tag: AcceptInvite
   public func advertiser(
     _: MCNearbyServiceAdvertiser,
-    didReceiveInvitationFromPeer _: MCPeerID,
-    withContext _: Data?,
+    didReceiveInvitationFromPeer peerID: MCPeerID,
+    withContext data: Data?,
     invitationHandler: @escaping (Bool, MCSession?) -> Void
   ) {
     // Call the handler to accept the peer's invitation to join.
-    invitationHandler(true, session)
+    let shouldAccept = self.delegate?.shouldAcceptJoinRequest?(peerID: peerID, context: data)
+    invitationHandler(shouldAccept != nil ? shouldAccept! : true, self.session)
   }
 }

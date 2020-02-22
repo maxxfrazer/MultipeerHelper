@@ -22,10 +22,17 @@ import MultipeerConnectivity
   /// - Parameter peer: the   `MCPeerID` of the peer that left
   @objc optional func peerLeft(_ peer: MCPeerID)
 
-  /// Callback for when a peer new peer has been found. will default to accept all peers
+  /// Callback for when a new peer has been found. will default to accept all peers
   /// - Parameter peer: the   `MCPeerID` of the peer who wants to join the network
-  /// - Returns: Bool if the peer should be invited to the network or not
-  @objc optional func peerDiscovered(_ peer: MCPeerID) -> Bool
+  /// - Returns: Bool if the peer request to join the network or not
+  @objc optional func shouldSendJoinRequest(_ peer: MCPeerID) -> Bool
+
+  /// Handle when a peer has requested to join the network
+  /// - Parameters:
+  ///   - peerID: Peer requesting to join
+  ///   - context: Any data the requesting peer may have sent with their request
+  /// - Returns: Bool if the peer's join request should be accepted
+  @objc optional func shouldAcceptJoinRequest(peerID: MCPeerID, context: Data?) -> Bool
 
   /// Peer can no longer be found on the network, and thus cannot receive data
   /// - Parameter peer: If a peer has left the network in a non typical way
