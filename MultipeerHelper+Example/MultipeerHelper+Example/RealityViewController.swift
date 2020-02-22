@@ -65,7 +65,7 @@ extension RealityViewController: MultipeerHelperDelegate {
   }
 
   func receivedData(_ data: Data, _ peer: MCPeerID) {
-    print(String(data: data, encoding: .ascii) ?? "Data is not an ASCII string")
+    print(String(data: data, encoding: .unicode) ?? "Data is not a unicode string")
   }
 
   func peerJoined(_ peer: MCPeerID) {
