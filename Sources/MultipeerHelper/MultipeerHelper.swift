@@ -39,10 +39,12 @@ public class MultipeerHelper: NSObject {
   /// - Parameters:
   ///   - serviceName: name of the service to be added, must be less than 15 lowercase ascii characters
   ///   - sessionType: Type of session (host, peer, both)
+  ///   - encryptionPreference: optional `MCEncryptionPreference`, defaults to `.required`
   ///   - delegate: optional `MultipeerHelperDelegate` for MultipeerConnectivity callbacks
   public init(
     serviceName: String,
     sessionType: SessionType = .both,
+    encryptionPreference: MCEncryptionPreference = .required,
     delegate: MultipeerHelperDelegate? = nil
   ) {
     self.serviceName = serviceName
@@ -50,7 +52,10 @@ public class MultipeerHelper: NSObject {
     self.delegate = delegate
 
     super.init()
-    session = MCSession(peer: myPeerID, securityIdentity: nil, encryptionPreference: .required)
+    session = MCSession(
+      peer: myPeerID, securityIdentity: nil,
+      encryptionPreference: encryptionPreference
+    )
     session.delegate = self
 
     if (self.sessionType.rawValue & SessionType.host.rawValue) != 0 {
