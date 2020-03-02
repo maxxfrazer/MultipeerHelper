@@ -141,6 +141,11 @@ public class MultipeerHelper: NSObject {
 }
 
 extension MultipeerHelper: MCSessionDelegate {
+
+  public func session(_ session: MCSession, didReceiveCertificate certificate: [Any]?, fromPeer peerID: MCPeerID, certificateHandler: @escaping (Bool) -> Void) {
+    certificateHandler(true)
+  }
+
   public func session(
     _: MCSession,
     peer peerID: MCPeerID,
