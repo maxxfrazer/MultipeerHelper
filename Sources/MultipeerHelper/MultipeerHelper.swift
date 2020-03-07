@@ -31,7 +31,7 @@ public class MultipeerHelper: NSObject {
     return syncServiceRK
   }
 
-  public let myPeerID = MCPeerID(displayName: UIDevice.current.name)
+  public var myPeerID: MCPeerID
 
   /// Quick lookup for a peer given their displayName
   private var peerIDLookup: [String: MCPeerID] = [:]
@@ -47,17 +47,20 @@ public class MultipeerHelper: NSObject {
   /// - Parameters:
   ///   - serviceName: name of the service to be added, must be less than 15 lowercase ascii characters
   ///   - sessionType: Type of session (host, peer, both)
+  ///   - peerID: Name of your device on the netowrk, defaults to `UIDevice.current.name`
   ///   - encryptionPreference: optional `MCEncryptionPreference`, defaults to `.required`
   ///   - delegate: optional `MultipeerHelperDelegate` for MultipeerConnectivity callbacks
   public init(
     serviceName: String,
     sessionType: SessionType = .both,
+    peerID: MCPeerID? = nil,
     encryptionPreference: MCEncryptionPreference = .required,
     delegate: MultipeerHelperDelegate? = nil
   ) {
     self.serviceName = serviceName
     self.sessionType = sessionType
     self.delegate = delegate
+    self.myPeerID = peerID ?? MCPeerID(displayName: UIDevice.current.name)
 
     super.init()
     peerIDLookup[myPeerID.displayName] = myPeerID
