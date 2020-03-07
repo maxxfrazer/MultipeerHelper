@@ -47,21 +47,24 @@ public class MultipeerHelper: NSObject {
   /// - Parameters:
   ///   - serviceName: name of the service to be added, must be less than 15 lowercase ascii characters
   ///   - sessionType: Type of session (host, peer, both)
-  ///   - peerID: Name of your device on the netowrk, defaults to `UIDevice.current.name`
+  ///   - peerName: String name of your device on the network, omitting or passing nil gives `UIDevice.current.name`
   ///   - encryptionPreference: optional `MCEncryptionPreference`, defaults to `.required`
   ///   - delegate: optional `MultipeerHelperDelegate` for MultipeerConnectivity callbacks
   public init(
     serviceName: String,
     sessionType: SessionType = .both,
-    peerID: MCPeerID? = nil,
+    peerName: String? = nil,
     encryptionPreference: MCEncryptionPreference = .required,
     delegate: MultipeerHelperDelegate? = nil
   ) {
     self.serviceName = serviceName
     self.sessionType = sessionType
     self.delegate = delegate
-    self.myPeerID = peerID ?? MCPeerID(displayName: UIDevice.current.name)
-
+    if let peerName = peerName {
+      self.myPeerID = MCPeerID(displayName: peerName)
+    } else {
+      self.myPeerID = MCPeerID(displayName: UIDevice.current.name)
+    }
     super.init()
     peerIDLookup[myPeerID.displayName] = myPeerID
     session = MCSession(
