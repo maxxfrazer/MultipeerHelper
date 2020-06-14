@@ -43,12 +43,16 @@ public class MultipeerHelper: NSObject {
   private var syncServiceRK: MultipeerConnectivityService?
 
   public weak var delegate: MultipeerHelperDelegate?
-
-  /// Initializes a Multipeer Helper. Pass your own peerName to avoid exceptions, as there are restrictions set by Apple on what is allowed.
+  /// Initializes a Multipeer Helper.
+  /// Pass your own peerName to avoid exceptions, as there are restrictions set by Apple on what is allowed.
   /// - Parameters:
   ///   - serviceName: name of the service to be added, must be less than 15 lowercase ascii characters
   ///   - sessionType: Type of session (host, peer, both)
-  ///   - peerName: String name of your device on the network, omitting or passing nil gives `UIDevice.current.name`. This value's maximum allowable length is 63 bytes in UTF-8 encoding. The displayName parameter may not be nil or an empty string. An exception will be thrown otherwise.
+  ///   - peerName: String name of your device on the network,
+  ///   omitting or passing nil gives `UIDevice.current.name`.
+  ///   This value's maximum allowable length is 63 bytes in UTF-8 encoding.
+  ///   The displayName parameter may not be nil or an empty string.
+  ///   An exception will be thrown otherwise.
   ///   - encryptionPreference: optional `MCEncryptionPreference`, defaults to `.required`
   ///   - delegate: optional `MultipeerHelperDelegate` for MultipeerConnectivity callbacks
   public init(
@@ -149,10 +153,6 @@ public class MultipeerHelper: NSObject {
 
 extension MultipeerHelper: MCSessionDelegate {
 
-  public func session(_ session: MCSession, didReceiveCertificate certificate: [Any]?, fromPeer peerID: MCPeerID, certificateHandler: @escaping (Bool) -> Void) {
-    certificateHandler(true)
-  }
-
   public func session(
     _: MCSession,
     peer peerID: MCPeerID,
@@ -197,6 +197,21 @@ extension MultipeerHelper: MCSessionDelegate {
     withError error: Error?
   ) {
     delegate?.receivedResource?(resourceName, peerID, localURL, error)
+  }
+
+  public func session(
+    _ session: MCSession,
+    didReceiveCertificate certificate: [Any]?,
+    fromPeer peerID: MCPeerID,
+    certificateHandler: @escaping (Bool) -> Void
+  ) {
+    if let certificateApproved = self.delegate?.receivedCertificate?(
+      certificate: certificate, fromPeer: peerID
+    ) {
+      certificateHandler(certificateApproved)
+      return
+    }
+    certificateHandler(true)
   }
 }
 
