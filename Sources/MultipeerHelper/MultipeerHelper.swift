@@ -6,7 +6,9 @@
 //
 
 import MultipeerConnectivity
+#if !os(tvOS)
 import RealityKit
+#endif
 
 public class MultipeerHelper: NSObject {
   /// What type of session you want to make.
@@ -23,13 +25,14 @@ public class MultipeerHelper: NSObject {
   public let sessionType: SessionType
   public let serviceName: String
 
+
+  #if !os(tvOS)
   /// Used for RealityKit, set this as your scene's synchronizationService
+  @available(iOS 13.0, macOS 10.15, *)
   public var syncService: MultipeerConnectivityService? {
-    if syncServiceRK == nil {
-      syncServiceRK = try? MultipeerConnectivityService(session: session)
-    }
-    return syncServiceRK
+    return try? MultipeerConnectivityService(session: session)
   }
+  #endif
 
   public var myPeerID: MCPeerID
 
@@ -40,7 +43,7 @@ public class MultipeerHelper: NSObject {
   public private(set) var session: MCSession!
   public private(set) var serviceAdvertiser: MCNearbyServiceAdvertiser?
   public private(set) var serviceBrowser: MCNearbyServiceBrowser?
-  private var syncServiceRK: MultipeerConnectivityService?
+
 
   public weak var delegate: MultipeerHelperDelegate?
   /// Initializes a Multipeer Helper.
@@ -68,7 +71,13 @@ public class MultipeerHelper: NSObject {
     if let peerName = peerName {
       self.myPeerID = MCPeerID(displayName: peerName)
     } else {
+      #if os(iOS) || os(tvOS)
       self.myPeerID = MCPeerID(displayName: UIDevice.current.name)
+      #elseif os(macOS)
+      self.myPeerID = MCPeerID(
+        displayName: Host.current().name ?? UUID().uuidString
+      )
+      #endif
     }
     super.init()
     peerIDLookup[myPeerID.displayName] = myPeerID

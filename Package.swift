@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
   name: "MultipeerHelper",
-  platforms: [.iOS("13.0")],
+  platforms: [.iOS(.v11), .macOS(.v10_10), .tvOS(.v9), .watchOS(.v2)],
   products: [
     .library(name: "MultipeerHelper", targets: ["MultipeerHelper"])
   ],
