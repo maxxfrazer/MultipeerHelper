@@ -1,6 +1,12 @@
-[![Lint Status](https://github.com/maxxfrazer/MultipeerHelper/workflows/swiftlint/badge.svg)](https://github.com/maxxfrazer/MultipeerHelper/actions)
-[![Build Status](https://github.com/maxxfrazer/MultipeerHelper/workflows/build/badge.svg)](https://github.com/maxxfrazer/MultipeerHelper/actions)
-[![Swift Package Manager](https://img.shields.io/github/v/release/maxxfrazer/MultipeerHelper?color=orange&label=SwiftPM%20📦)](https://github.com/apple/swift-package-manager)
+
+<p align="center">
+  <img src="https://img.shields.io/github/v/release/maxxfrazer/MultipeerHelper?color=orange&label=SwiftPM&logo=swift"/>
+  <img src="https://img.shields.io/badge/platform-iOS%20%7C%20macOS%20%7C%20tvOS-lightgrey"/>
+  <img src="https://img.shields.io/badge/Swift-5.2-orange?logo=swift"/>
+  <img src="https://img.shields.io/github/license/maxxfrazer/MultipeerHelper"/>
+  <img src="https://github.com/maxxfrazer/MultipeerHelper/workflows/build/badge.svg"/>
+  <img src="https://github.com/maxxfrazer/MultipeerHelper/workflows/swiftlint/badge.svg"/>
+</p>
 
 ![Path Example 1](https://github.com/maxxfrazer/MultipeerHelper/blob/master/media/MultipeerHelper-Header.png)
 
