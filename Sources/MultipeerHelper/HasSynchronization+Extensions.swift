@@ -6,13 +6,17 @@
 //  Copyright © 2019 Max Cobb. All rights reserved.
 //
 
+#if !os(tvOS)
 import RealityKit
+#endif
 
 public enum MHelperErrors: Error {
   case timedOut
   case failure
 }
 
+#if !os(tvOS)
+@available(iOS 13.0, macOS 10.15, *)
 public extension HasSynchronization {
   /// Execute the escaping completion if you are the entity owner, once you receive ownership
   /// or call result failure if ownership cannot be granted to the caller.
@@ -39,3 +43,4 @@ public extension HasSynchronization {
     }
   }
 }
+#endif

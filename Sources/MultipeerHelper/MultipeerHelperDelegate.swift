@@ -40,4 +40,5 @@ import MultipeerConnectivity
   @objc optional func receivedStream(_ stream: InputStream, _ streamName: String, _ peer: MCPeerID)
   @objc optional func receivingResource(_ resourceName: String, _ peer: MCPeerID, _ progress: Progress)
   @objc optional func receivedResource(_ resourceName: String, _ peer: MCPeerID, _ url: URL?, _ error: Error?)
+  @objc optional func receivedCertificate(certificate: [Any]?, fromPeer peerID: MCPeerID) -> Bool
 }
