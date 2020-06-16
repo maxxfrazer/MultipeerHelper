@@ -24,10 +24,7 @@ class RealityViewController: UIViewController, ARSessionDelegate {
     // Do not synchronize this entity
     focusSquare.synchronization = nil
     focusSquare.viewDelegate = arView
-  }
-
-  func session(_: ARSession, didUpdate _: ARFrame) {
-    focusSquare.updateFocusNode()
+    focusSquare.setAutoUpdate(to: true)
   }
 
   func setupARView() {

@@ -12,9 +12,9 @@
 		F32BA087238935140075556C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F32BA086238935140075556C /* Assets.xcassets */; };
 		F32BA08A238935140075556C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F32BA089238935140075556C /* Preview Assets.xcassets */; };
 		F32BA08D238935140075556C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F32BA08B238935140075556C /* LaunchScreen.storyboard */; };
-		F32BA096238936210075556C /* FocusEntity in Frameworks */ = {isa = PBXBuildFile; productRef = F32BA095238936210075556C /* FocusEntity */; };
 		F32BA0982389B1880075556C /* RealityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32BA0972389B1880075556C /* RealityViewController.swift */; };
 		F32BA0A12389E6AB0075556C /* RealityViewController+Gestures.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32BA0A02389E6AB0075556C /* RealityViewController+Gestures.swift */; };
+		F3D758E9249949FC0019A821 /* FocusEntity in Frameworks */ = {isa = PBXBuildFile; productRef = F3D758E8249949FC0019A821 /* FocusEntity */; };
 		F3F3F88A2401658700AC1EBF /* MultipeerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F3F8872401658700AC1EBF /* MultipeerHelper.swift */; };
 		F3F3F88B2401658700AC1EBF /* HasSynchronization+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F3F8882401658700AC1EBF /* HasSynchronization+Extensions.swift */; };
 		F3F3F88C2401658700AC1EBF /* MultipeerHelperDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F3F8892401658700AC1EBF /* MultipeerHelperDelegate.swift */; };
@@ -40,7 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F32BA096238936210075556C /* FocusEntity in Frameworks */,
+				F3D758E9249949FC0019A821 /* FocusEntity in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,7 +114,7 @@
 			);
 			name = "MultipeerHelper+Example";
 			packageProductDependencies = (
-				F32BA095238936210075556C /* FocusEntity */,
+				F3D758E8249949FC0019A821 /* FocusEntity */,
 			);
 			productName = "MultipeerHelper+Example";
 			productReference = F32BA07D238935120075556C /* MultipeerHelper+Example.app */;
@@ -145,7 +145,7 @@
 			);
 			mainGroup = F32BA074238935120075556C;
 			packageReferences = (
-				F32BA094238936210075556C /* XCRemoteSwiftPackageReference "FocusEntity" */,
+				F3D758E7249949FC0019A821 /* XCRemoteSwiftPackageReference "FocusEntity" */,
 			);
 			productRefGroup = F32BA07E238935120075556C /* Products */;
 			projectDirPath = "";
@@ -319,7 +319,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_ASSET_PATHS = "\"MultipeerHelper+Example/Preview Content\"";
-				DEVELOPMENT_TEAM = N2RTJDRM64;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "MultipeerHelper+Example/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -340,7 +340,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_ASSET_PATHS = "\"MultipeerHelper+Example/Preview Content\"";
-				DEVELOPMENT_TEAM = N2RTJDRM64;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "MultipeerHelper+Example/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -378,20 +378,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		F32BA094238936210075556C /* XCRemoteSwiftPackageReference "FocusEntity" */ = {
+		F3D758E7249949FC0019A821 /* XCRemoteSwiftPackageReference "FocusEntity" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/maxxfrazer/FocusEntity.git";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		F32BA095238936210075556C /* FocusEntity */ = {
+		F3D758E8249949FC0019A821 /* FocusEntity */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F32BA094238936210075556C /* XCRemoteSwiftPackageReference "FocusEntity" */;
+			package = F3D758E7249949FC0019A821 /* XCRemoteSwiftPackageReference "FocusEntity" */;
 			productName = FocusEntity;
 		};
 /* End XCSwiftPackageProductDependency section */
