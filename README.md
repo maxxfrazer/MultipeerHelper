@@ -8,7 +8,7 @@
   <img src="https://github.com/maxxfrazer/MultipeerHelper/workflows/swiftlint/badge.svg?branch=main"/>
 </p>
 
-![Path Example 1](https://github.com/maxxfrazer/MultipeerHelper/blob/master/media/MultipeerHelper-Header.png)
+![Path Example 1](https://github.com/maxxfrazer/MultipeerHelper/blob/main/media/MultipeerHelper-Header.png?raw=true)
 
 # MultipeerHelper
 
