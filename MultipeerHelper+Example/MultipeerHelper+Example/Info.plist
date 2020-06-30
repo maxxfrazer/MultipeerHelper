@@ -36,6 +36,7 @@
 	<key>NSBonjourServices</key>
 	<array>
 		<string>_helper-test._tcp</string>
+		<string>_helper-test._udp</string>
 	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
