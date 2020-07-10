@@ -6,7 +6,7 @@
 //
 
 import MultipeerConnectivity
-#if !os(tvOS)
+#if canImport(RealityKit)
 import RealityKit
 #endif
 
@@ -25,8 +25,7 @@ public class MultipeerHelper: NSObject {
   public let sessionType: SessionType
   public let serviceName: String
 
-
-  #if !os(tvOS)
+  #if canImport(RealityKit)
   /// Used for RealityKit, set this as your scene's synchronizationService
   @available(iOS 13.0, macOS 10.15, *)
   public var syncService: MultipeerConnectivityService? {
@@ -43,7 +42,6 @@ public class MultipeerHelper: NSObject {
   public private(set) var session: MCSession!
   public private(set) var serviceAdvertiser: MCNearbyServiceAdvertiser?
   public private(set) var serviceBrowser: MCNearbyServiceBrowser?
-
 
   public weak var delegate: MultipeerHelperDelegate?
   /// Initializes a Multipeer Helper.
@@ -89,7 +87,19 @@ public class MultipeerHelper: NSObject {
     session.delegate = self
 
     if (self.sessionType.rawValue & SessionType.host.rawValue) != 0 {
-      serviceAdvertiser = MCNearbyServiceAdvertiser(peer: myPeerID, discoveryInfo: nil, serviceType: self.serviceName)
+      var discoveryInfo = [String: String]()
+      if #available(iOS 13.4, *) {
+        let networkLoc = NetworkCompatibilityToken.local
+        let jsonData = try? JSONEncoder().encode(networkLoc)
+        if let encodedToken = String(data: jsonData!, encoding: .utf8) {
+          discoveryInfo["compatability_token"] = encodedToken
+        }
+      }
+      serviceAdvertiser = MCNearbyServiceAdvertiser(
+        peer: myPeerID,
+        discoveryInfo: discoveryInfo,
+        serviceType: self.serviceName
+      )
       serviceAdvertiser?.delegate = self
       serviceAdvertiser?.startAdvertisingPeer()
     }
@@ -158,6 +168,16 @@ public class MultipeerHelper: NSObject {
     }
     return connectedPeers.first { $0.displayName == name }
   }
+
+  /// Method used for disconnecting all services. Once completed,
+  /// create a new MultipeerHelper if you want to connect to sessions again.
+  func disconnectAll() {
+    self.serviceAdvertiser?.stopAdvertisingPeer()
+    self.serviceBrowser?.stopBrowsingForPeers()
+    self.serviceAdvertiser = nil
+    self.serviceBrowser = nil
+    self.session.disconnect()
+  }
 }
 
 extension MultipeerHelper: MCSessionDelegate {
@@ -170,6 +190,7 @@ extension MultipeerHelper: MCSessionDelegate {
     if state == .connected {
       peerIDLookup[peerID.displayName] = peerID
       delegate?.peerJoined?(peerID)
+      self.serviceBrowser?.stopBrowsingForPeers()
     } else if state == .notConnected {
       peerIDLookup.removeValue(forKey: peerID.displayName)
       delegate?.peerLeft?(peerID)
@@ -229,11 +250,10 @@ extension MultipeerHelper: MCNearbyServiceBrowserDelegate {
   public func browser(
     _ browser: MCNearbyServiceBrowser,
     foundPeer peerID: MCPeerID,
-    withDiscoveryInfo _: [String: String]?
+    withDiscoveryInfo info: [String: String]?
   ) {
     // Ask the handler whether we should invite this peer or not
-    if delegate?.shouldSendJoinRequest == nil || (delegate?.shouldSendJoinRequest?(peerID) ?? false) {
-      print("BrowserDelegate \(peerID)")
+    if delegate?.shouldSendJoinRequest == nil || (delegate?.shouldSendJoinRequest?(peerID, with: info) ?? false) {
       browser.invitePeer(peerID, to: session, withContext: nil, timeout: 10)
     }
   }
@@ -246,7 +266,7 @@ extension MultipeerHelper: MCNearbyServiceBrowserDelegate {
 extension MultipeerHelper: MCNearbyServiceAdvertiserDelegate {
   /// - Tag: AcceptInvite
   public func advertiser(
-    _: MCNearbyServiceAdvertiser,
+    _ advo: MCNearbyServiceAdvertiser,
     didReceiveInvitationFromPeer peerID: MCPeerID,
     withContext data: Data?,
     invitationHandler: @escaping (Bool, MCSession?) -> Void
