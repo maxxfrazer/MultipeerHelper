@@ -47,9 +47,11 @@ class RealityViewController: UIViewController, ARSessionDelegate {
 
 extension RealityViewController: MultipeerHelperDelegate {
 
-  func shouldSendJoinRequest(_ peer: MCPeerID, with discoveryInfo: [String: String]?) -> Bool {
+  func shouldSendJoinRequest(
+    _ peer: MCPeerID,
+    with discoveryInfo: [String: String]?
+  ) -> Bool {
     if self.checkPeerToken(with: discoveryInfo) {
-      print("compatible peer!")
       return true
     }
     print("incompatible peer!")

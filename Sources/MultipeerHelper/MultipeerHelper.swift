@@ -15,6 +15,7 @@ public class MultipeerHelper: NSObject {
   ///
   /// `both` creates a session where all users are equal
   /// Otherwise if you want one specific user to be the host, choose `host` and `peer`
+  /// A `host` will create a service advertiser, and a `peer` will create a service browser.
   public enum SessionType: Int {
     case host = 1
     case peer = 2
@@ -87,14 +88,18 @@ public class MultipeerHelper: NSObject {
     session.delegate = self
 
     if (self.sessionType.rawValue & SessionType.host.rawValue) != 0 {
-      var discoveryInfo = [String: String]()
-      if #available(iOS 13.4, *) {
+      var discoveryInfo = self.delegate?.setDiscoveryInfo?()
+        ?? [String: String]()
+
+      #if canImport(RealityKit)
+      if #available(iOS 13.4, macOS 10.15.4, *) {
         let networkLoc = NetworkCompatibilityToken.local
         let jsonData = try? JSONEncoder().encode(networkLoc)
         if let encodedToken = String(data: jsonData!, encoding: .utf8) {
-          discoveryInfo["compatability_token"] = encodedToken
+          discoveryInfo["compatibility_token"] = encodedToken
         }
       }
+      #endif
       serviceAdvertiser = MCNearbyServiceAdvertiser(
         peer: myPeerID,
         discoveryInfo: discoveryInfo,

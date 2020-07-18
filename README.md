@@ -8,7 +8,7 @@
   <img src="https://github.com/maxxfrazer/MultipeerHelper/workflows/swiftlint/badge.svg?branch=main"/>
 </p>
 
-![Path Example 1](https://github.com/maxxfrazer/MultipeerHelper/blob/main/media/MultipeerHelper-Header.png?raw=true)
+![MultipeerHelper Header](https://github.com/maxxfrazer/MultipeerHelper/blob/main/media/MultipeerHelper-Header.png?raw=true)
 
 # MultipeerHelper
 
@@ -33,6 +33,17 @@ self.multipeerHelp = MultipeerHelper(
 )
 ```
 
+Because MultipeerConnectivity looks over your local network to find other devices to connect with, there are a few new things to include since iOS 14.
+
+The first thing, is to include the key `NSLocalNetworkUsageDescription` in your app's Info.plist, along with a short text explaining why you need to use the local network. For example "This application needs access to the local network to find opponents.".
+
+As well as the above, you also need to add another key, `NSBonjourServices`. Bonjour services is an array of Bonjour service types.
+For example, if your serviceName is "helper-test", you will need to add `_helper-test._tcp` and `_helper-test._udp`.
+
+The two above keys are included in [the Example Project](MultipeerHelper+Example).
+
+### RealityKit
+
 To extend this to RealityKit's synchronization service, simply add the following:
 
 ```swift
@@ -40,6 +51,24 @@ self.arView.scene.synchronizationService = self.multipeerHelp.syncService
 ```
 
 And also make sure that your ARConfiguration's isCollaborationEnabled property is set to true.
+
+To make sure RealityKit's synchronizationService runs properly, you must ensure that the RealityKit version installed on any two devices are compatible.
+
+By default, any OS using MultipeerHelper that can install RealityKit (iOS, iPadOS and macOS) will have a key added to the discoveryInfo.
+To use this easily, you can add the `shouldSendJoinRequest` method to your `MultipeerHelperDelegate`, and make use of the `checkPeerToken` which is accessible to any class which inherits the `MultipeerHelperDelegate`. Here's an example:
+
+```swift
+extension RealityViewController: MultipeerHelperDelegate {
+  func shouldSendJoinRequest(
+    _ peer: MCPeerID,
+    with discoveryInfo: [String: String]?
+  ) -> Bool {
+    self.checkPeerToken(with: discoveryInfo)
+  }
+}
+```
+
+This method is used in [the Example Project](MultipeerHelper+Example).
 
 ### Initializer Parameters
 
@@ -51,8 +80,14 @@ This is the type of service to advertise or search for. Due to how MultipeerConn
  - Must not begin or end with a hyphen
  - Must not contain hyphens adjacent to other hyphens.
 
-#### sessionType (default: .both)
+#### sessionType (default: `.both`)
 This lets the service know if it should be acting as a service `host` (advertiser), `peer` (browser), or in a scenario where it doesn't matter, `both`. The default for this parameter is `both`, which is the scenario where all devices want to just connect to each other with no questions asked.
 
-#### delegate (default: nil)
+#### peerName (default: `UIDevice.current.name`)
+String name of your device on the network.
+
+#### encryptionPreference (default: `.required`)
+encryptionPreference is how data sent over the network are encrypted.
+
+#### delegate (default: `nil`)
 This delegate object will inherit the `MultipeerHelperDelegate` protocol, which can be used for all the handling of transferring data round the network and seeing when others join and leave.

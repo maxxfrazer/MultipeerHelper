@@ -36,6 +36,11 @@ import MultipeerConnectivity
   /// - Returns: Bool if the peer's join request should be accepted
   @objc optional func shouldAcceptJoinRequest(peerID: MCPeerID, context: Data?) -> Bool
 
+  /// This will be set as the base for the discoveryInfo, which is sent out by the advertiser (host).
+  /// The key "compatibility_token" is in use by MultipeerHelper, for checking the
+  /// compatibility of RealityKit versions.
+  @objc optional func setDiscoveryInfo() -> [String: String]
+
   /// Peer can no longer be found on the network, and thus cannot receive data
   /// - Parameter peer: If a peer has left the network in a non typical way
   @objc optional func peerLost(_ peer: MCPeerID)
@@ -48,23 +53,23 @@ import MultipeerConnectivity
 #if canImport(RealityKit)
 import RealityKit
 extension MultipeerHelperDelegate {
-  /// Checks whether the discovered session is using a compabible version of RealityKit
+  /// Checks whether the discovered session is using a compatible version of RealityKit
   /// For collaborative sessions.
-  /// - Parameter discoveryInfo:
-  /// - Returns:
+  /// - Parameter discoveryInfo: The discoveryInfo from the advertiser
+  /// picked up by a browser.
+  /// - Returns: Boolean representing whether or not the two devices
+  /// have compatible versions of RealityKit.
   public func checkPeerToken(with discoveryInfo: [String: String]?) -> Bool {
-    guard let compTokenStr = discoveryInfo?["compatability_token"]
+    guard let compTokenStr = discoveryInfo?["compatibility_token"]
           else {
       return false
     }
-    print("Found token key in discovery info")
-    if #available(iOS 13.4, *) {
+    if #available(iOS 13.4, macOS 10.15.4, *) {
       if let tokenData = compTokenStr.data(using: .utf8),
          let compToken = try? JSONDecoder().decode(
           NetworkCompatibilityToken.self,
           from: tokenData
       ) {
-        print("Decoded Token")
         return compToken.compatibilityWith(.local) == .compatible
       }
     }

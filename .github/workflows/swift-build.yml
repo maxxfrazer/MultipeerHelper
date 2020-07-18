@@ -13,6 +13,9 @@ on:
 jobs:
   build:
     runs-on: macOS-latest
+    strategy:
+        matrix:
+          SDK: [iphoneos, macosx, appletvos]
     steps:
     - uses: actions/checkout@v1
     - name: build
@@ -22,4 +25,4 @@ jobs:
       env:
         PROJECT: MultipeerHelper.xcodeproj
         SCHEME: MultipeerHelper-Package
-        SDK: iphoneos
+        SDK: ${{ matrix.SDK }}
