@@ -59,7 +59,7 @@ extension MultipeerHelperDelegate {
   /// picked up by a browser.
   /// - Returns: Boolean representing whether or not the two devices
   /// have compatible versions of RealityKit.
-  public func checkPeerToken(with discoveryInfo: [String: String]?) -> Bool {
+  public static func checkPeerToken(with discoveryInfo: [String: String]?) -> Bool {
     guard let compTokenStr = discoveryInfo?["compatibility_token"]
           else {
       return false

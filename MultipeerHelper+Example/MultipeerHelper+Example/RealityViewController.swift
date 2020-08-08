@@ -51,7 +51,7 @@ extension RealityViewController: MultipeerHelperDelegate {
     _ peer: MCPeerID,
     with discoveryInfo: [String: String]?
   ) -> Bool {
-    if self.checkPeerToken(with: discoveryInfo) {
+    if RealityViewController.checkPeerToken(with: discoveryInfo) {
       return true
     }
     print("incompatible peer!")
