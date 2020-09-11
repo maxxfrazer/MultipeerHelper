@@ -13,13 +13,16 @@ on:
 jobs:
   build:
     runs-on: macOS-latest
+    strategy:
+        matrix:
+          SDK: [iphoneos, macosx, appletvos]
     steps:
     - uses: actions/checkout@v1
     - name: build
       run: |
         swift package generate-xcodeproj
-        xcodebuild clean build -project $PROJECT -scheme $SCHEME -sdk $SDK CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
+        xcodebuild clean build -project $PROJECT -scheme $SCHEME -sdk $SDK CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO | xcpretty
       env:
         PROJECT: MultipeerHelper.xcodeproj
         SCHEME: MultipeerHelper-Package
-        SDK: iphoneos
+        SDK: ${{ matrix.SDK }}
