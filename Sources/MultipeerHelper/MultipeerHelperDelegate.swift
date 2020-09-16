@@ -37,7 +37,7 @@ import MultipeerConnectivity
   @objc optional func shouldAcceptJoinRequest(peerID: MCPeerID, context: Data?) -> Bool
 
   /// This will be set as the base for the discoveryInfo, which is sent out by the advertiser (host).
-  /// The key "compatibility_token" is in use by MultipeerHelper, for checking the
+  /// The key "MultipeerHelper.compTokenKey" is in use by MultipeerHelper, for checking the
   /// compatibility of RealityKit versions.
   @objc optional func setDiscoveryInfo() -> [String: String]
 
@@ -60,7 +60,7 @@ extension MultipeerHelperDelegate {
   /// - Returns: Boolean representing whether or not the two devices
   /// have compatible versions of RealityKit.
   public static func checkPeerToken(with discoveryInfo: [String: String]?) -> Bool {
-    guard let compTokenStr = discoveryInfo?["compatibility_token"]
+    guard let compTokenStr = discoveryInfo?[MultipeerHelper.compTokenKey]
           else {
       return false
     }

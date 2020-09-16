@@ -6,6 +6,7 @@
 //
 
 import MultipeerConnectivity
+import Foundation
 #if canImport(RealityKit)
 import RealityKit
 #endif
@@ -21,6 +22,10 @@ public class MultipeerHelper: NSObject {
     case peer = 2
     case both = 3
   }
+
+  public static let compTokenKey = "MPH_CompToken"
+  public static let osVersionKey = "MPH_OSVersion"
+  public static let platformKey = "MPH_Platform"
 
   /// Detemines whether your service is advertising, browsing, or both.
   public let sessionType: SessionType
@@ -86,7 +91,10 @@ public class MultipeerHelper: NSObject {
       encryptionPreference: encryptionPreference
     )
     session.delegate = self
+    self.setupSession()
+  }
 
+  private func setupSession() {
     if (self.sessionType.rawValue & SessionType.host.rawValue) != 0 {
       var discoveryInfo = self.delegate?.setDiscoveryInfo?()
         ?? [String: String]()
@@ -96,9 +104,20 @@ public class MultipeerHelper: NSObject {
         let networkLoc = NetworkCompatibilityToken.local
         let jsonData = try? JSONEncoder().encode(networkLoc)
         if let encodedToken = String(data: jsonData!, encoding: .utf8) {
-          discoveryInfo["compatibility_token"] = encodedToken
+          discoveryInfo[MultipeerHelper.compTokenKey] = encodedToken
         }
       }
+      #endif
+      #if os(iOS) || os(tvOS)
+      discoveryInfo[MultipeerHelper.osVersionKey] = UIDevice.current.systemVersion
+        #if os(iOS)
+        discoveryInfo[MultipeerHelper.platformKey] = "iOS"
+        #else
+        discoveryInfo[MultipeerHelper.platformKey] = "tvOS"
+        #endif
+      #elseif os(macOS)
+      discoveryInfo[MultipeerHelper.osVersionKey] = ProcessInfo.processInfo.operatingSystemVersionString
+      discoveryInfo[MultipeerHelper.platformKey] = "macOS"
       #endif
       serviceAdvertiser = MCNearbyServiceAdvertiser(
         peer: myPeerID,
@@ -176,12 +195,12 @@ public class MultipeerHelper: NSObject {
 
   /// Method used for disconnecting all services. Once completed,
   /// create a new MultipeerHelper if you want to connect to sessions again.
-  func disconnectAll() {
+  public func disconnectAll() {
     self.serviceAdvertiser?.stopAdvertisingPeer()
     self.serviceBrowser?.stopBrowsingForPeers()
     self.serviceAdvertiser = nil
     self.serviceBrowser = nil
-    self.session.disconnect()
+    self.session?.disconnect()
   }
 }
 
