@@ -11,6 +11,7 @@ import Foundation
 import RealityKit
 #endif
 
+/// A class made to wrap around an [MCSession](doc://MultipeerHelper/documentation/multipeerhelper/multipeerhelper/session) to simplify usage.
 public class MultipeerHelper: NSObject {
   /// What type of session you want to make.
   ///
@@ -23,12 +24,16 @@ public class MultipeerHelper: NSObject {
     case both = 3
   }
 
+  /// Key added to discovery info to check RealityKit compatibility token
   public static let compTokenKey = "MPH_CompToken"
+  /// Key added to discovery info to show OS version
   public static let osVersionKey = "MPH_OSVersion"
+  /// Key added to discovery info to show device platform
   public static let platformKey = "MPH_Platform"
 
   /// Detemines whether your service is advertising, browsing, or both.
   public let sessionType: SessionType
+  /// Name of the service, created at initialisation
   public let serviceName: String
 
   #if canImport(RealityKit)
@@ -39,16 +44,20 @@ public class MultipeerHelper: NSObject {
   }
   #endif
 
-  public var myPeerID: MCPeerID
+  /// ``MCPeerID`` set at initialisation. Default will be device name.
+  public internal(set) var myPeerID: MCPeerID
 
   /// Quick lookup for a peer given their displayName
   private var peerIDLookup: [String: MCPeerID] = [:]
 
   /// The MultipeerConnectivity session being used
   public private(set) var session: MCSession!
+  /// MultipeerConnectivity advertiser
   public private(set) var serviceAdvertiser: MCNearbyServiceAdvertiser?
+  /// MultipeerConnectivity browser
   public private(set) var serviceBrowser: MCNearbyServiceBrowser?
 
+  /// Delegate used to get some callback methods including data received
   public weak var delegate: MultipeerHelperDelegate?
   /// Initializes a Multipeer Helper.
   /// Pass your own peerName to avoid exceptions, as there are restrictions set by Apple on what is allowed.
@@ -213,16 +222,16 @@ extension MultipeerHelper: MCSessionDelegate {
   ) {
     if state == .connected {
       peerIDLookup[peerID.displayName] = peerID
-      delegate?.peerJoined?(peerID)
+      delegate?.peerJoined?(peerHelper: self, peerID)
       self.serviceBrowser?.stopBrowsingForPeers()
     } else if state == .notConnected {
       peerIDLookup.removeValue(forKey: peerID.displayName)
-      delegate?.peerLeft?(peerID)
+      delegate?.peerLeft?(peerHelper: self, peerID)
     }
   }
 
   public func session(_: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-    delegate?.receivedData?(data, peerID)
+    delegate?.receivedData?(peerHelper: self, data, peerID)
   }
 
   public func session(
@@ -231,7 +240,7 @@ extension MultipeerHelper: MCSessionDelegate {
     withName streamName: String,
     fromPeer peerID: MCPeerID
   ) {
-    delegate?.receivedStream?(stream, streamName, peerID)
+    delegate?.receivedStream?(peerHelper: self, stream, streamName, peerID)
   }
 
   public func session(
@@ -240,7 +249,7 @@ extension MultipeerHelper: MCSessionDelegate {
     fromPeer peerID: MCPeerID,
     with progress: Progress
   ) {
-    delegate?.receivingResource?(resourceName, peerID, progress)
+    delegate?.receivingResource?(peerHelper: self, resourceName, peerID, progress)
   }
 
   public func session(
@@ -250,7 +259,7 @@ extension MultipeerHelper: MCSessionDelegate {
     at localURL: URL?,
     withError error: Error?
   ) {
-    delegate?.receivedResource?(resourceName, peerID, localURL, error)
+    delegate?.receivedResource?(peerHelper: self, resourceName, peerID, localURL, error)
   }
 
   public func session(
@@ -260,7 +269,7 @@ extension MultipeerHelper: MCSessionDelegate {
     certificateHandler: @escaping (Bool) -> Void
   ) {
     if let certificateApproved = self.delegate?.receivedCertificate?(
-      certificate: certificate, fromPeer: peerID
+      peerHelper: self, certificate: certificate, fromPeer: peerID
     ) {
       certificateHandler(certificateApproved)
       return
@@ -277,13 +286,13 @@ extension MultipeerHelper: MCNearbyServiceBrowserDelegate {
     withDiscoveryInfo info: [String: String]?
   ) {
     // Ask the handler whether we should invite this peer or not
-    if delegate?.shouldSendJoinRequest == nil || (delegate?.shouldSendJoinRequest?(peerID, with: info) ?? false) {
+    if delegate?.shouldSendJoinRequest == nil || (delegate?.shouldSendJoinRequest?(peerHelper: self, peerID, with: info) ?? false) {
       browser.invitePeer(peerID, to: session, withContext: nil, timeout: 10)
     }
   }
 
   public func browser(_: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
-    delegate?.peerLost?(peerID)
+    delegate?.peerLost?(peerHelper: self, peerID)
   }
 }
 
@@ -296,7 +305,7 @@ extension MultipeerHelper: MCNearbyServiceAdvertiserDelegate {
     invitationHandler: @escaping (Bool, MCSession?) -> Void
   ) {
     // Call the handler to accept the peer's invitation to join.
-    let shouldAccept = self.delegate?.shouldAcceptJoinRequest?(peerID: peerID, context: data)
+    let shouldAccept = self.delegate?.shouldAcceptJoinRequest?(peerHelper: self, peerID: peerID, context: data)
     invitationHandler(shouldAccept != nil ? shouldAccept! : true, self.session)
   }
 }
