@@ -8,14 +8,15 @@
 
 #if !os(tvOS)
 import RealityKit
-#endif
 
+/// Error enum for some common Multipeer Errors
 public enum MHelperErrors: Error {
+  /// Request timed out
   case timedOut
+  /// Request failed
   case failure
 }
 
-#if !os(tvOS)
 @available(iOS 13.0, macOS 10.15, *)
 public extension HasSynchronization {
   /// Execute the escaping completion if you are the entity owner, once you receive ownership
