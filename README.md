@@ -42,6 +42,9 @@ For example, if your serviceName is "helper-test", you will need to add `_helper
 
 The two above keys are included in [the Example Project](MultipeerHelper+Example).
 
+See full documentation here:<br>
+https://maxxfrazer.github.io/MultipeerHelper/documentation/multipeerhelper/
+
 ### RealityKit
 
 To extend this to RealityKit's synchronization service, simply add the following:
