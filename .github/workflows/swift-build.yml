@@ -14,14 +14,14 @@ jobs:
   build:
     runs-on: macOS-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Swift Lint
+    - name: Checkout 🛎
+      uses: actions/checkout@v3
+    - name: Swift Lint 🧹
       run: swiftlint --strict
-    - name: Build for all SDKs
+    - name: Test Build 🔨
       run: |
-        xcodebuild clean build -project $PROJECT -scheme $SCHEME -sdk iphoneos CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO;
-        xcodebuild clean build -project $PROJECT -scheme $SCHEME -sdk macosx CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO;
-        xcodebuild clean build -project $PROJECT -scheme $SCHEME -sdk appletvos CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO;
+        xcodebuild clean build -scheme $SCHEME -destination 'generic/platform=iOS'
+        xcodebuild clean build -scheme $SCHEME -destination 'platform=macOS'
+        xcodebuild clean build -scheme $SCHEME -destination 'platform=tvOS'
       env:
-        PROJECT: MultipeerHelper.xcodeproj
-        SCHEME: MultipeerHelper-Package
+        SCHEME: MultipeerHelper
