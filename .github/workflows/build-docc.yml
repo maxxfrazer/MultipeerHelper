@@ -4,10 +4,6 @@ on:
   push:
     tags:
       - '*'
-  pull_request:
-    branches:
-    - "*"
-
 
 permissions:
   contents: write
@@ -17,7 +13,6 @@ jobs:
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
-
       - name: Build DocC
         run: |
           sudo xcode-select -s /Applications/Xcode_14.0.app;

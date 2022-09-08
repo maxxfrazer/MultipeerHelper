@@ -35,7 +35,9 @@ import MultipeerConnectivity
   ///   - discoveryInfo: The info dictionary advertised by the discovered peer. For more information on the contents of this dictionary, see the documentation for
   ///  [init(peer:discoveryInfo:serviceType:)](apple-reference-documentation://ls%2Fdocumentation%2Fmultipeerconnectivity%2Fmcnearbyserviceadvertiser%2F1407102-init) in [MCNearbyServiceAdvertiser](apple-reference-documentation://ls%2Fdocumentation%2Fmultipeerconnectivity%2Fmcnearbyserviceadvertiser).
   /// - Returns: Bool if the peer request to join the network or not
-  @objc optional func shouldSendJoinRequest(peerHelper: MultipeerHelper, _ peer: MCPeerID, with discoveryInfo: [String: String]?) -> Bool
+  @objc optional func shouldSendJoinRequest(
+    peerHelper: MultipeerHelper, _ peer: MCPeerID, with discoveryInfo: [String: String]?
+  ) -> Bool
 
   /// Handle when a peer has requested to join the network
   /// - Parameters:

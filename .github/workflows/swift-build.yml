@@ -22,6 +22,6 @@ jobs:
       run: |
         xcodebuild clean build -scheme $SCHEME -destination 'generic/platform=iOS'
         xcodebuild clean build -scheme $SCHEME -destination 'platform=macOS'
-        xcodebuild clean build -scheme $SCHEME -destination 'platform=tvOS'
+        # xcodebuild clean build -scheme $SCHEME -destination 'platform=tvOS Simulator,name=Any tvOS Device'
       env:
         SCHEME: MultipeerHelper
