@@ -286,7 +286,9 @@ extension MultipeerHelper: MCNearbyServiceBrowserDelegate {
     withDiscoveryInfo info: [String: String]?
   ) {
     // Ask the handler whether we should invite this peer or not
-    if delegate?.shouldSendJoinRequest == nil || (delegate?.shouldSendJoinRequest?(peerHelper: self, peerID, with: info) ?? false) {
+    if delegate?.shouldSendJoinRequest == nil
+        || (delegate?.shouldSendJoinRequest?(peerHelper: self, peerID, with: info) ?? false
+    ) {
       browser.invitePeer(peerID, to: session, withContext: nil, timeout: 10)
     }
   }

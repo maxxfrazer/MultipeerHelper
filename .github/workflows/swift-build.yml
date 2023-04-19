@@ -13,16 +13,15 @@ on:
 jobs:
   build:
     runs-on: macOS-latest
-    strategy:
-        matrix:
-          SDK: [iphoneos, macosx, appletvos]
     steps:
-    - uses: actions/checkout@v1
-    - name: build
+    - name: Checkout 🛎
+      uses: actions/checkout@v3
+    - name: Swift Lint 🧹
+      run: swiftlint --strict
+    - name: Test Build 🔨
       run: |
-        swift package generate-xcodeproj
-        xcodebuild clean build -project $PROJECT -scheme $SCHEME -sdk $SDK CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO | xcpretty
+        xcodebuild clean build -scheme $SCHEME -destination 'generic/platform=iOS'
+        xcodebuild clean build -scheme $SCHEME -destination 'platform=macOS'
+        # xcodebuild clean build -scheme $SCHEME -destination 'platform=tvOS Simulator,name=Any tvOS Device'
       env:
-        PROJECT: MultipeerHelper.xcodeproj
-        SCHEME: MultipeerHelper-Package
-        SDK: ${{ matrix.SDK }}
+        SCHEME: MultipeerHelper
